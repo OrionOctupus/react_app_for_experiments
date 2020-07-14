@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="container pt-3">
       <h1>It's working!!</h1>
-      <a href="https://google.com" target="_blank">Google</a>
+      <a href="https://google.com" target="_blank" rel="noopener noreferrer">Google</a>
       <div className="row">
         <div className="col">
           <PostForm />
@@ -16,11 +16,11 @@ function App() {
       <div className="row">
         <div className="col">
           <h2>Синхронные посты</h2>
-          <Posts posts={[]} />
+          <Posts />
         </div>
         <div className="col">
           <h2>Асинхронные посты</h2>
-          <FetchedPosts posts={[]} />
+          <FetchedPosts />
         </div>
       </div>
     </div>
