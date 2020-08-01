@@ -1,38 +1,40 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createPost } from '../redux/actions';
+import { createPost, showAlert } from '../redux/actions';
+import Alert from './Alert';
 
 class PostForm extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            title: ''
+            title: '',
+            body: '',
         }
     }
 
     submitHandler = (event) => {
         event.preventDefault();
 
-        const { title } = this.state;
+        const { title, body } = this.state;
         if (!title.trim()) {
-            return null;
+            return this.props.showAlert('Введите текст заголовка поста');
         }
+
         const newPost = {
-            title, id: Date.now().toString()
+            title,
+            body,
+            id: Date.now().toString()
         }
 
         this.props.createPost(newPost)
-        this.setState({ title: '' })
+        this.setState({ title: '', body: '' })
+        console.log(newPost);
     }
 
     changeHandle = (event) => {
         event.persist()
         console.log(event.target.value);
-
-        // this.setState({
-        //     title: e.target.value
-        // })
 
         //запись с использованием ES6 синтаксиса, коротко, красиво и универсально, но сложночитаемо
         this.setState(prev => ({ ...prev, ...{ [event.target.name]: event.target.value } }))
@@ -41,6 +43,8 @@ class PostForm extends React.Component {
     render() {
         return (
             <form onSubmit={this.submitHandler}>
+                {this.props.alert ? <Alert messageAlert={this.props.alert} /> : null}
+
                 <div className="form-group">
                     <label htmlFor="textInput">Заголовок поста</label>
                     <input
@@ -52,6 +56,17 @@ class PostForm extends React.Component {
                         onChange={this.changeHandle}
                     />
                 </div>
+                <div className="form-group">
+                    <label htmlFor="textarea">Текст поста</label>
+                    <textarea
+                        className="form-control"
+                        id="textarea"
+                        rows="3"
+                        name='body'
+                        value={this.state.body}
+                        onChange={this.changeHandle}
+                    />
+                </div>
                 <button className="btn btn-success" type="submit">Создать</button>
             </form>
         )
@@ -60,7 +75,11 @@ class PostForm extends React.Component {
 
 const mapDispatchToProps = {
     createPost: createPost,
-
+    showAlert: showAlert
 }
 
-export default connect(null, mapDispatchToProps)(PostForm);
+const mapStateToProps = state => {
+    return { alert: state.app.isAlert, }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostForm);

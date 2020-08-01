@@ -6,7 +6,7 @@ export default function Post({ post }) {
         <div className="card">
             <div className="card-body">
                 <h5 className="card-title">{post.title}</h5>
-                <p className="card-text">Text example!</p>
+                <p className="card-text">{post.body}</p>
                 <a href="https://ya.ru" className="btn btn-danger">Don't push!</a>
             </div>
         </div>
